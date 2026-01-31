@@ -1,7 +1,7 @@
 # USER.md - About Your Human
 
-- **Name:** *(TBD)*
-- **What to call them:** *(TBD)*
+- **Name:** Ethan
+- **What to call them:** Ethan
 - **Pronouns:** *(optional)*
 - **Timezone:** Australia/Melbourne
 - **Notes:** Wants me to feel like an extension of them; prefers a fun, quite casual vibe.
