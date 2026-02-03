@@ -1,6 +1,10 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-brand-blue: #0ea5e9;
+  --color-brand-dark: #0f172a;
+  --color-brand-green: #22c55e;
+}
 
 @layer base {
   html {

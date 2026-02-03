@@ -29,6 +29,19 @@
   - `GOOGLE_ADS_SETUP.md` - $20/day campaign strategy
 - **Client:** Elliot - Dynamic Solutions Electrical & Aircon (Cranbourne)
 
+### Plumber Blocked Drains - Melbourne Plumbing Site
+- **Status:** ✅ DONE (v1.0 live + SEO optimized)
+- **Date:** 2026-02-03
+- **Notes:** Modern rebuild of friend's plumbing website. React + Vite + Tailwind. Mobile-optimized, SEO-friendly with schema markup.
+- **Live URL:** https://plumber-site-wine.vercel.app/
+- **Code Location:** `/Users/adbiptuy/clawd/plumber-site/`
+- **Features:**
+  - Blocked drain services showcase
+  - FAQ section with schema
+  - Service areas listing
+  - Click-to-call phone number
+  - Mobile-first design
+
 ---
 
 ## 🔄 IN PROGRESS
