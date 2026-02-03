@@ -615,10 +615,46 @@ const Contact = () => {
   );
 };
 
+// Sticky Call Button for Mobile
+const StickyCallButton = () => {
+  const phoneNumber = "0400 123 456";
+  
+  return (
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-brand-dark/95 backdrop-blur border-t border-white/10 p-4 md:hidden">
+      <a 
+        href={`tel:${phoneNumber.replace(/\s/g, '')}`}
+        className="flex items-center justify-center gap-2 bg-brand-green hover:bg-brand-green/90 text-white w-full py-4 rounded-full font-bold text-lg transition shadow-lg shadow-brand-green/25"
+      >
+        <Phone className="w-5 h-5" />
+        Call Now: {phoneNumber}
+      </a>
+    </div>
+  );
+};
+
+// Breadcrumb Schema for SEO
+const BreadcrumbSchema = () => {
+  const breadcrumbs = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://plumberblockeddrains.vercel.app/" },
+      { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://plumberblockeddrains.vercel.app/#services" },
+      { "@type": "ListItem", "position": 3, "name": "FAQ", "item": "https://plumberblockeddrains.vercel.app/#faq" }
+    ]
+  };
+
+  return (
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }} />
+  );
+};
+
 // Footer
 const Footer = () => {
+  const phoneNumber = "0400 123 456";
+  
   return (
-    <footer className="bg-brand-dark border-t border-white/10 py-8">
+    <footer className="bg-brand-dark border-t border-white/10 py-8 md:pb-8 pb-24">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-2">
@@ -630,6 +666,12 @@ const Footer = () => {
           
           <div className="text-gray-400 text-sm text-center md:text-right">
             <p>Melbourne's Blocked Drain Specialists</p>
+            <p className="mt-1 flex items-center justify-center md:justify-end gap-2">
+              <Phone className="w-4 h-4 text-brand-green" />
+              <a href={`tel:${phoneNumber.replace(/\s/g, '')}`} className="hover:text-white transition">
+                {phoneNumber}
+              </a>
+            </p>
             <p className="mt-1">© 2026 - All rights reserved</p>
           </div>
         </div>
@@ -643,6 +685,7 @@ function App() {
   return (
     <div className="min-h-screen bg-brand-dark">
       <SchemaMarkup />
+      <BreadcrumbSchema />
       <Header />
       <main>
         <Hero />
@@ -653,6 +696,7 @@ function App() {
         <Contact />
       </main>
       <Footer />
+      <StickyCallButton />
     </div>
   );
 }
