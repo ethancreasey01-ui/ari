@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "skills": {
+    "playwright-cli": {
+      "version": "1.0.1",
+      "installedAt": 1770091240889
+    },
+    "reddit-scraper": {
+      "version": "1.0.0",
+      "installedAt": 1770091243215
+    },
+    "clawbrowser": {
+      "version": "0.1.0",
+      "installedAt": 1770091244989
+    },
+    "qmd": {
+      "version": "1.0.0",
+      "installedAt": 1770100495009
+    }
+  }
+}

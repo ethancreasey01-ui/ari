@@ -1,0 +1,13 @@
+- generic [ref=e6]:
+  - generic [ref=e7]:
+    - generic [ref=e8]: Your Browsing Activity Has Been Paused
+    - generic [ref=e9]:
+      - text: We've detected unusual behavior on either your network or your browser.
+      - paragraph [ref=e10]: "To resolve this:"
+    - list [ref=e11]:
+      - listitem [ref=e12]: Sign in to your account if you haven't already
+      - listitem [ref=e13]: Change your Wi-Fi or cellular network
+      - listitem [ref=e14]: Switch devices or move to a different location if possible
+  - generic [ref=e16]:
+    - generic [ref=e17]: 14.2.55.253
+    - generic [ref=e18]: ab688a6c-fbb7-4ba7-8082-306a9279f9fc
