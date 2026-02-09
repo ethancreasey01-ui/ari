@@ -2,3 +2,11 @@
 .env
 .credentials/
 *.log
+node_modules/
+dist/
+build/
+__pycache__/
+*.pyc
+.DS_Store
+.backup-log.txt
+.backup-errors.txt
