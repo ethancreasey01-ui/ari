@@ -1,9 +1,11 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-blue: #0ea5e9;
-  --color-brand-dark: #0f172a;
-  --color-brand-green: #22c55e;
+  --color-brand-burgundy: #632424;
+  --color-brand-gold: #EBC95E;
+  --color-brand-bronze: #AD8F56;
+  --color-brand-black: #0a0a0a;
+  --color-brand-dark: #111111;
 }
 
 @layer base {
@@ -12,12 +14,16 @@
   }
   
   body {
-    @apply bg-brand-dark text-white antialiased;
+    @apply bg-brand-black text-white antialiased;
   }
 }
 
 @layer utilities {
   .text-gradient {
-    @apply bg-gradient-to-r from-brand-blue to-brand-green bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-brand-gold to-brand-bronze bg-clip-text text-transparent;
+  }
+  
+  .bg-gradient-brand {
+    @apply bg-gradient-to-r from-brand-burgundy to-brand-black;
   }
 }

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#632424"/>
+      <stop offset="100%" style="stop-color:#4a1a1a"/>
+    </linearGradient>
+    <linearGradient id="dropGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#EBC95E"/>
+      <stop offset="100%" style="stop-color:#AD8F56"/>
+    </linearGradient>
+  </defs>
+  <rect width="100" height="100" rx="20" fill="url(#bgGrad)"/>
+  <!-- Water Drop -->
+  <path d="M50 20 C50 20, 25 50, 25 65 C25 78.8 36.2 90 50 90 C63.8 90 75 78.8 75 65 C75 50, 50 20, 50 20 Z" fill="url(#dropGrad)"/>
+  <!-- Inner shine -->
+  <ellipse cx="40" cy="55" rx="8" ry="12" fill="white" opacity="0.3"/>
+  <!-- Pipe/Drain symbol -->
+  <path d="M35 75 L65 75" stroke="#632424" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="50" cy="75" r="8" fill="#632424"/>
+</svg>
