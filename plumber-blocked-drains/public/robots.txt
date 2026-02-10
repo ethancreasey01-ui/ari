@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://plumberblockeddrains.vercel.app/sitemap.xml
