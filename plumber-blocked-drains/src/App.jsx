@@ -16,21 +16,25 @@ const colors = {
   darkGray: '#111111'
 };
 
-// Logo Component with Real Logo
+// Logo Component with Plumbing Icon
 const Logo = ({ size = 'md' }) => {
   const sizes = { sm: 'w-12 h-12', md: 'w-16 h-16', lg: 'w-20 h-20', xl: 'w-24 h-24' };
   const textSizes = { sm: 'text-xs', md: 'text-sm', lg: 'text-base', xl: 'text-lg' };
   
   return (
     <div className="flex items-center gap-3">
-      <motion.img 
-        src="/logo.jpg" 
-        alt="Masters In Plumbing Drainage Logo"
-        className={`${sizes[size]} rounded-xl object-cover border-2`}
+      <motion.div
+        className={`${sizes[size]} rounded-2xl overflow-hidden border-2 relative flex-shrink-0 bg-black`}
         style={{ borderColor: colors.gold }}
-        whileHover={{ scale: 1.1 }}
+        whileHover={{ scale: 1.05 }}
         transition={{ duration: 0.3 }}
-      />
+      >
+        <img 
+          src="/plumbing-logo.svg" 
+          alt="Blockage Masters"
+          className="w-full h-full object-cover"
+        />
+      </motion.div>
       <div>
         <div className={`font-bold text-white ${textSizes[size]}`}>Blockage Masters</div>
         <div className="text-xs" style={{ color: colors.gold }}>Melbourne's Drain Specialists</div>
@@ -39,7 +43,7 @@ const Logo = ({ size = 'md' }) => {
   );
 };
 
-// Water Flow Background
+// Water Flow Background - Enhanced with bubbles and ripples
 const WaterFlowBackground = () => {
   const canvasRef = useRef(null);
   
@@ -51,29 +55,81 @@ const WaterFlowBackground = () => {
     canvas.height = window.innerHeight;
     
     const particles = [];
-    for (let i = 0; i < 30; i++) {
+    const bubbles = [];
+    
+    // Gold water particles
+    for (let i = 0; i < 40; i++) {
       particles.push({
         x: Math.random() * canvas.width,
+        y: canvas.height + Math.random() * 300,
+        size: Math.random() * 3 + 1,
+        speedY: Math.random() * 2 + 0.5,
+        speedX: (Math.random() - 0.5) * 0.8,
+        opacity: Math.random() * 0.4 + 0.1,
+        wobble: Math.random() * Math.PI * 2
+      });
+    }
+    
+    // Rising bubbles
+    for (let i = 0; i < 20; i++) {
+      bubbles.push({
+        x: Math.random() * canvas.width,
         y: canvas.height + Math.random() * 200,
-        size: Math.random() * 4 + 2,
-        speedY: Math.random() * 1.5 + 0.5,
-        speedX: (Math.random() - 0.5) * 0.5,
-        opacity: Math.random() * 0.3 + 0.1
+        size: Math.random() * 8 + 3,
+        speedY: Math.random() * 1.5 + 0.3,
+        opacity: Math.random() * 0.15 + 0.05,
+        pulse: Math.random() * Math.PI * 2
       });
     }
     
     let animationId;
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw water particles
       particles.forEach(p => {
         p.y -= p.speedY;
-        p.x += p.speedX + Math.sin(p.y * 0.01) * 0.5;
-        if (p.y < -10) p.y = canvas.height + 10;
+        p.x += p.speedX + Math.sin(p.y * 0.01 + p.wobble) * 0.3;
+        p.wobble += 0.02;
+        if (p.y < -10) {
+          p.y = canvas.height + 10;
+          p.x = Math.random() * canvas.width;
+        }
+        
+        // Glow effect
+        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 2);
+        gradient.addColorStop(0, `rgba(235, 201, 94, ${p.opacity})`);
+        gradient.addColorStop(1, 'rgba(235, 201, 94, 0)');
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(235, 201, 94, ${p.opacity})`;
+        ctx.arc(p.x, p.y, p.size * 2, 0, Math.PI * 2);
+        ctx.fillStyle = gradient;
         ctx.fill();
       });
+      
+      // Draw bubbles
+      bubbles.forEach(b => {
+        b.y -= b.speedY;
+        b.pulse += 0.05;
+        const pulseSize = b.size + Math.sin(b.pulse) * 1;
+        
+        if (b.y < -20) {
+          b.y = canvas.height + 20;
+          b.x = Math.random() * canvas.width;
+        }
+        
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, pulseSize, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(235, 201, 94, ${b.opacity})`;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        
+        // Inner highlight
+        ctx.beginPath();
+        ctx.arc(b.x - pulseSize * 0.3, b.y - pulseSize * 0.3, pulseSize * 0.2, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${b.opacity * 0.5})`;
+        ctx.fill();
+      });
+      
       animationId = requestAnimationFrame(animate);
     };
     animate();
@@ -89,7 +145,7 @@ const WaterFlowBackground = () => {
     };
   }, []);
   
-  return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0" style={{ opacity: 0.4 }} />;
+  return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0" style={{ opacity: 0.5 }} />;
 };
 
 // Animated Counter
@@ -271,6 +327,46 @@ const SchemaMarkup = () => {
   );
 };
 
+// Animated Phone Button with Water Ripple Effect
+const AnimatedPhoneButton = () => {
+  return (
+    <motion.a 
+      href="tel:0400123456"
+      className="hidden md:flex items-center gap-2 px-5 py-2.5 rounded-full text-black font-semibold relative overflow-hidden"
+      style={{ background: colors.gold }}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+    >
+      {/* Water ripple rings */}
+      <span className="absolute inset-0 rounded-full animate-ping opacity-20" style={{ background: colors.gold }} />
+      <motion.span 
+        className="absolute inset-0 rounded-full"
+        style={{ background: `radial-gradient(circle, ${colors.gold}40, transparent)` }}
+        animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0, 0.5] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      />
+      
+      {/* Phone icon with drip animation */}
+      <motion.div
+        animate={{ y: [0, -2, 0] }}
+        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <Phone className="w-4 h-4 relative z-10" />
+      </motion.div>
+      
+      <span className="relative z-10">0400 123 456</span>
+      
+      {/* Live indicator dot */}
+      <motion.span 
+        className="w-2 h-2 rounded-full bg-green-500 absolute -top-1 -right-1"
+        animate={{ scale: [1, 1.3, 1] }}
+        transition={{ duration: 1, repeat: Infinity }}
+        style={{ boxShadow: '0 0 10px #22c55e' }}
+      />
+    </motion.a>
+  );
+};
+
 // Header
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -282,14 +378,15 @@ const Header = () => {
   
   return (
     <motion.header 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'py-3' : 'py-5'}`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'py-3' : 'py-5'}`}
       style={{ 
         background: scrolled ? `${colors.black}ee` : 'transparent',
         backdropFilter: scrolled ? 'blur(10px)' : 'none',
         borderBottom: scrolled ? `1px solid ${colors.burgundy}40` : 'none'
       }}
-      initial={{ y: -100 }} 
-      animate={{ y: 0 }}
+      initial={{ opacity: 0, y: -20 }} 
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
     >
       <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
         <Logo size="md" />
@@ -305,43 +402,130 @@ const Header = () => {
             </motion.a>
           ))}
         </nav>
-        <motion.a 
-          href="tel:0400123456"
-          className="hidden md:flex items-center gap-2 px-5 py-2.5 rounded-full text-black font-semibold"
-          style={{ background: colors.gold }}
-          whileHover={{ scale: 1.05, boxShadow: `0 0 20px ${colors.gold}80` }}
-        >
-          <Phone className="w-4 h-4" />0400 123 456
-        </motion.a>
+        <AnimatedPhoneButton />
       </div>
     </motion.header>
   );
 };
 
+// Animated Water Droplets
+const FloatingDroplets = () => {
+  const droplets = [
+    { size: 12, left: '10%', delay: 0 },
+    { size: 8, left: '20%', delay: 0.5 },
+    { size: 15, left: '75%', delay: 1 },
+    { size: 10, left: '85%', delay: 1.5 },
+    { size: 6, left: '5%', delay: 2 },
+    { size: 14, left: '90%', delay: 0.8 },
+  ];
+  
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {droplets.map((d, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full"
+          style={{
+            width: d.size,
+            height: d.size,
+            left: d.left,
+            bottom: -20,
+            background: `radial-gradient(circle at 30% 30%, ${colors.gold}, ${colors.bronze})`,
+            boxShadow: `0 0 ${d.size}px ${colors.gold}50`
+          }}
+          animate={{
+            y: [0, -window.innerHeight - 100],
+            opacity: [0, 1, 1, 0],
+            x: [0, Math.sin(i) * 50, 0]
+          }}
+          transition={{
+            duration: 8 + Math.random() * 4,
+            repeat: Infinity,
+            delay: d.delay,
+            ease: "linear"
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+// Animated Waves at Bottom
+const BottomWaves = () => (
+  <div className="absolute bottom-0 left-0 right-0 w-full overflow-hidden leading-none">
+    <motion.svg 
+      viewBox="0 0 1440 120" 
+      preserveAspectRatio="none" 
+      className="w-full h-24 md:h-32"
+      animate={{ x: [0, -100, 0] }}
+      transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+    >
+      <path 
+        d="M0,60 C240,100 480,20 720,60 C960,100 1200,20 1440,60 L1440,120 L0,120 Z" 
+        fill={`${colors.burgundy}25`}
+      />
+    </motion.svg>
+    <motion.svg 
+      viewBox="0 0 1440 120" 
+      preserveAspectRatio="none" 
+      className="absolute bottom-0 left-0 w-full h-16 md:h-24"
+      animate={{ x: [0, 60, 0] }}
+      transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+    >
+      <path 
+        d="M0,80 C360,40 600,100 960,60 C1200,30 1320,80 1440,70 L1440,120 L0,120 Z" 
+        fill={`${colors.gold}20`}
+      />
+    </motion.svg>
+  </div>
+);
+
 // Hero
 const Hero = () => {
   const { scrollY } = useScroll();
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+  const opacity = useTransform(scrollY, [0, 500], [1, 0.3]);
   
   return (
     <section 
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
-      style={{ background: `linear-gradient(180deg, ${colors.black} 0%, ${colors.darkGray} 50%, ${colors.black} 100%)` }}
+      style={{ background: `linear-gradient(180deg, ${colors.black} 0%, ${colors.darkGray} 40%, ${colors.black} 100%)` }}
     >
+      {/* Animated Background Orbs */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div 
           className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl"
-          style={{ background: `radial-gradient(circle, ${colors.burgundy}30, transparent)` }}
-          animate={{ scale: [1, 1.3, 1], rotate: [0, 90, 0] }}
-          transition={{ duration: 20, repeat: Infinity }}
+          style={{ background: `radial-gradient(circle, ${colors.burgundy}40, transparent)` }}
+          animate={{ 
+            scale: [1, 1.5, 1], 
+            rotate: [0, 180, 360],
+            x: [0, 50, 0],
+            y: [0, -30, 0]
+          }}
+          transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div 
           className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full blur-3xl"
-          style={{ background: `radial-gradient(circle, ${colors.gold}15, transparent)` }}
-          animate={{ scale: [1.3, 1, 1.3] }}
-          transition={{ duration: 15, repeat: Infinity }}
+          style={{ background: `radial-gradient(circle, ${colors.gold}25, transparent)` }}
+          animate={{ 
+            scale: [1.3, 1, 1.3],
+            x: [0, -40, 0],
+            y: [0, 40, 0]
+          }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-3xl"
+          style={{ background: `radial-gradient(circle, ${colors.burgundy}20, transparent)` }}
+          animate={{ rotate: 360 }}
+          transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
         />
       </div>
+      
+      {/* Floating Droplets */}
+      <FloatingDroplets />
+      
+      {/* Bottom Waves */}
+      <BottomWaves />
       
       <motion.div style={{ opacity }} className="relative z-10 max-w-7xl mx-auto px-4 py-20 text-center">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
@@ -357,15 +541,26 @@ const Hero = () => {
         
         <motion.h1 
           className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight"
-          initial={{ opacity: 0, y: 50 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          transition={{ delay: 0.2 }}
+          initial={{ opacity: 0, scale: 0.9 }} 
+          animate={{ opacity: 1, scale: 1 }} 
+          transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
         >
-          <span style={{ color: colors.white }}>Blocked Drains</span>
+          <motion.span 
+            style={{ color: colors.white }}
+            animate={{ textShadow: ['0 0 20px rgba(255,255,255,0)', '0 0 40px rgba(255,255,255,0.1)', '0 0 20px rgba(255,255,255,0)'] }}
+            transition={{ duration: 3, repeat: Infinity }}
+          >
+            Blocked Drains
+          </motion.span>
           <br />
-          <span className="bg-clip-text text-transparent" style={{ backgroundImage: `linear-gradient(90deg, ${colors.gold}, ${colors.bronze})` }}>
+          <motion.span 
+            className="bg-clip-text text-transparent inline-block"
+            style={{ backgroundImage: `linear-gradient(90deg, ${colors.gold}, ${colors.bronze}, ${colors.gold})`, backgroundSize: '200% 100%' }}
+            animate={{ backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+          >
             Cleared Fast
-          </span>
+          </motion.span>
         </motion.h1>
         
         <motion.p 
@@ -421,6 +616,102 @@ const Hero = () => {
           ))}
         </div>
       </motion.div>
+    </section>
+  );
+};
+
+// Meet the Specialist - Personal Introduction
+const MeetSpecialist = () => {
+  return (
+    <section className="py-24 relative overflow-hidden" style={{ background: colors.darkGray }}>
+      {/* Decorative gradient line */}
+      <div 
+        className="absolute top-0 left-0 right-0 h-px"
+        style={{ background: `linear-gradient(90deg, transparent, ${colors.gold}, transparent)` }}
+      />
+      
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          {/* Photo Side */}
+          <ScrollReveal>
+            <div className="relative">
+              {/* Circular photo frame */}
+              <motion.div 
+                className="w-64 h-64 md:w-80 md:h-80 mx-auto rounded-full overflow-hidden border-4 relative"
+                style={{ borderColor: colors.gold }}
+                whileHover={{ scale: 1.02 }}
+              >
+                {/* Ron's photo - CCTV drain inspection in action */}
+                <img 
+                  src="/ron-working.jpg" 
+                  alt="Ron performing CCTV drain inspection" 
+                  className="w-full h-full object-cover"
+                />
+                
+                {/* Animated ring */}
+                <motion.div
+                  className="absolute inset-0 rounded-full border-2 pointer-events-none"
+                  style={{ borderColor: colors.gold }}
+                  animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0, 0.5] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                />
+              </motion.div>
+              
+              {/* Experience badge */}
+              <motion.div
+                className="absolute -bottom-4 left-1/2 -translate-x-1/2 px-6 py-3 rounded-full font-bold text-sm"
+                style={{ background: colors.gold, color: colors.black }}
+                initial={{ y: 20, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                10+ Years Experience
+              </motion.div>
+            </div>
+          </ScrollReveal>
+          
+          {/* Text Side */}
+          <ScrollReveal delay={0.2}>
+            <div>
+              <motion.div
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm mb-6 border"
+                style={{ background: `${colors.burgundy}20`, borderColor: `${colors.burgundy}50`, color: colors.gold }}
+                whileHover={{ scale: 1.05 }}
+              >
+                <Users className="w-4 h-4" />
+                Your Local Expert
+              </motion.div>
+              
+              <h2 className="text-4xl md:text-5xl font-bold mb-6" style={{ color: colors.white }}>
+                Hi, I am <span style={{ color: colors.gold }}>Ron</span>
+                <br />
+                <span className="text-2xl md:text-3xl" style={{ color: '#9ca3af' }}>Your Local Drain Specialist</span>
+              </h2>
+              
+              <p className="text-lg mb-6 leading-relaxed" style={{ color: '#d1d5db' }}>
+                I have been solving blocked drains for homeowners and businesses across Melbourne 
+                for over a decade. I believe in honest, transparent service — showing you exactly 
+                what is causing the problem and fixing it right the first time.
+              </p>
+              
+              <p className="text-lg mb-8 leading-relaxed" style={{ color: '#9ca3af' }}>
+                No hidden fees, no unnecessary upsells. Just quality drain clearing you can count on, 
+                backed by our satisfaction guarantee.
+              </p>
+              
+              <motion.a 
+                href="tel:0400123456" 
+                className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-black font-bold"
+                style={{ background: colors.gold }}
+                whileHover={{ scale: 1.05, boxShadow: `0 10px 40px ${colors.gold}50` }}
+              >
+                <Phone className="w-5 h-5" />
+                Speak with Ron Directly
+              </motion.a>
+            </div>
+          </ScrollReveal>
+        </div>
+      </div>
     </section>
   );
 };
@@ -748,51 +1039,16 @@ const Pricing = () => {
   );
 };
 
-// Areas Section - Modern Visual Design
+// Areas Section - Simple Clean List
 const Areas = () => {
-  const regions = [
-    {
-      name: "Bayside",
-      suburbs: ["Brighton", "St Kilda", "South Yarra", "Toorak"],
-      icon: "🌊"
-    },
-    {
-      name: "Inner East",
-      suburbs: ["Hawthorn", "Richmond", "Camberwell", "Malvern"],
-      icon: "🏠"
-    },
-    {
-      name: "South-East",
-      suburbs: ["Bentleigh", "Caulfield", "Carnegie", "Oakleigh"],
-      icon: "🌳"
-    },
-    {
-      name: "Eastern",
-      suburbs: ["Glen Waverley", "Mount Waverley", "Wheelers Hill", "Chadstone"],
-      icon: "🌲"
-    }
-  ];
-  
-  const otherSuburbs = ["Murrumbeena", "Hughesdale", "Clayton", "Notting Hill"];
-  
   return (
-    <section id="areas" className="py-24 relative overflow-hidden" style={{ background: colors.black }}>
-      {/* Background accent */}
-      <div 
-        className="absolute top-0 left-0 right-0 h-px"
-        style={{ background: `linear-gradient(90deg, transparent, ${colors.burgundy}, ${colors.gold}, ${colors.burgundy}, transparent)` }}
-      />
-      
-      <div className="max-w-6xl mx-auto px-4">
+    <section id="areas" className="py-24 relative" style={{ background: colors.black }}>
+      <div className="max-w-4xl mx-auto px-4">
         <ScrollReveal>
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <motion.div
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm mb-6 border"
-              style={{ 
-                background: `${colors.burgundy}20`, 
-                borderColor: `${colors.burgundy}50`,
-                color: colors.gold 
-              }}
+              style={{ background: `${colors.burgundy}20`, borderColor: `${colors.burgundy}50`, color: colors.gold }}
               whileHover={{ scale: 1.05 }}
             >
               <MapPin className="w-4 h-4" />
@@ -800,71 +1056,78 @@ const Areas = () => {
             </motion.div>
             
             <h2 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: colors.white }}>
-              Service Areas
+              We Service <span style={{ color: colors.gold }}>All of Melbourne</span>
             </h2>
             <p className="text-xl max-w-2xl mx-auto" style={{ color: '#9ca3af' }}>
-              Fast same-day response across all Melbourne suburbs
+              From the CBD to the outer suburbs — same day response
             </p>
           </div>
         </ScrollReveal>
         
-        {/* Region Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {regions.map((region, index) => (
-            <ScrollReveal key={region.name} delay={index * 0.1}>
-              <motion.div
-                className="p-6 rounded-2xl border text-center h-full"
-                style={{ 
-                  background: `${colors.darkGray}50`,
-                  borderColor: `${colors.burgundy}30`
-                }}
-                whileHover={{ 
-                  y: -5, 
-                  borderColor: colors.gold,
-                  boxShadow: `0 20px 40px ${colors.burgundy}20`
-                }}
-              >
-                <div className="text-4xl mb-4">{region.icon}</div>
-                <h3 className="text-xl font-bold mb-4" style={{ color: colors.gold }}>{region.name}</h3>
-                <div className="flex flex-wrap justify-center gap-2">
-                  {region.suburbs.map(suburb => (
-                    <span 
-                      key={suburb}
-                      className="text-sm px-3 py-1 rounded-full"
-                      style={{ 
-                        background: `${colors.burgundy}30`,
-                        color: colors.white 
-                      }}
-                    >
-                      {suburb}
-                    </span>
-                  ))}
-                </div>
-              </motion.div>
-            </ScrollReveal>
-          ))}
-        </div>
-        
-        {/* Plus more */}
-        <ScrollReveal delay={0.4}>
-          <div className="text-center">
-            <p className="mb-4" style={{ color: '#6b7280' }}>
-              Also servicing: {otherSuburbs.join(" • ")} and surrounds
+        <ScrollReveal delay={0.2}>
+          <div className="text-center mb-8">
+            <p className="text-2xl md:text-3xl font-light mb-8" style={{ color: colors.white }}>
+              <span style={{ color: colors.gold }}>Bayside</span> • <span style={{ color: colors.gold }}>Inner East</span> • <span style={{ color: colors.gold }}>South-East</span> • <span style={{ color: colors.gold }}>Eastern</span>
             </p>
-            <motion.div
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold"
-              style={{ background: colors.burgundy, color: colors.white }}
-              whileHover={{ scale: 1.05, background: colors.gold, color: colors.black }}
+            
+            <div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-10">
+              {['Brighton', 'Hawthorn', 'Camberwell', 'Glen Waverley', 'St Kilda', 'Caulfield', 'Oakleigh', 'South Yarra', 'Malvern', 'Toorak', 'Richmond', 'Carnegie'].map((suburb, i) => (
+                <motion.span 
+                  key={suburb}
+                  className="px-4 py-2 rounded-full border text-sm md:text-base"
+                  style={{ 
+                    background: `${colors.burgundy}20`, 
+                    borderColor: `${colors.burgundy}40`,
+                    color: colors.white 
+                  }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  whileHover={{ borderColor: colors.gold, background: colors.burgundy }}
+                >
+                  {suburb}
+                </motion.span>
+              ))}
+            </div>
+            
+            <p className="text-lg mb-8" style={{ color: '#6b7280' }}>
+              + 15 more suburbs across Melbourne
+            </p>
+            
+            <motion.a 
+              href="tel:0400123456"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-lg"
+              style={{ background: colors.gold, color: colors.black }}
+              whileHover={{ scale: 1.05, boxShadow: `0 10px 30px ${colors.gold}50` }}
             >
               <Phone className="w-5 h-5" />
-              Check Your Area — Call Now
-            </motion.div>
+              Check if We Service Your Area
+            </motion.a>
           </div>
         </ScrollReveal>
       </div>
     </section>
   );
 };
+
+// Simple Wave Divider - No gaps, clean curves
+const WaveDivider = ({ flip = false }) => (
+  <div className={`w-full overflow-hidden leading-[0] ${flip ? 'rotate-180' : ''}`}>
+    <svg 
+      viewBox="0 0 1440 120" 
+      preserveAspectRatio="none" 
+      className="relative block w-full h-16 md:h-20"
+      style={{ minWidth: '100%' }}
+    >
+      {/* Single smooth wave - no gaps */}
+      <path 
+        d="M0,60 C240,120 480,0 720,60 C960,120 1200,0 1440,60 L1440,120 L0,120 Z" 
+        fill={colors.burgundy}
+        opacity="0.9"
+      />
+    </svg>
+  </div>
+);
 
 // Reviews Section with Elfsight
 const Reviews = () => {
@@ -1011,6 +1274,7 @@ function App() {
       <WaterFlowBackground />
       <Header />
       <Hero />
+      <MeetSpecialist />
       <WhyChooseUs />
       <Guarantee />
       <Pricing />
