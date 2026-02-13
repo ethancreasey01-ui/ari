@@ -16,6 +16,34 @@
     "qmd": {
       "version": "1.0.0",
       "installedAt": 1770100495009
+    },
+    "marketing-mode": {
+      "version": "1.0.0",
+      "installedAt": 1770971205176
+    },
+    "marketing-drafter": {
+      "version": "1.0.0",
+      "installedAt": 1770971206793
+    },
+    "email-marketing-copy": {
+      "version": "1.0.1",
+      "installedAt": 1770971208421
+    },
+    "business-development": {
+      "version": "1.0.0",
+      "installedAt": 1770971216531
+    },
+    "brand-identity": {
+      "version": "0.1.0",
+      "installedAt": 1770971218307
+    },
+    "business-automation": {
+      "version": "1.0.2",
+      "installedAt": 1770971219541
+    },
+    "competitive-analysis": {
+      "version": "0.1.0",
+      "installedAt": 1770971224326
     }
   }
 }
