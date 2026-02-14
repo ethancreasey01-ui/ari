@@ -1,0 +1,29 @@
+{
+  "id": "scribe-1771068056331",
+  "agentId": "scribe",
+  "agentName": "Scribe",
+  "request": "Hello",
+  "status": "completed",
+  "timestamp": 1771068056331,
+  "response": {
+    "content": "👋 Hey Ethan! Scribe here — your content & copy specialist.
+
+I'm ready to help you with:
+✍️ Facebook & Instagram posts
+📧 Email sequences & newsletters  
+🎯 Ad copy (Google, Facebook, TikTok)
+📝 Blog posts & articles
+💬 Sales pages & landing page copy
+
+Just tell me what you need and I'll craft compelling, conversion-focused copy for your clients.
+
+**Example requests:**
+• \"Write 5 Facebook posts for Danny's bathroom renovation\"  
+• \"Create an email sequence for new client onboarding\"
+• \"Write Google Ads copy for Elliot's electrical services\"
+
+What can I write for you today? 🚀",
+    "deliverables": ["scribe-introduction"],
+    "completedAt": 1771068100000
+  }
+}
