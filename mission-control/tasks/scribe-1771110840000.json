@@ -1,0 +1,12 @@
+{
+  "id": "scribe-1771110840000",
+  "agentId": "scribe",
+  "agentName": "Scribe",
+  "request": "Hello",
+  "status": "completed",
+  "timestamp": 1771110840000,
+  "response": {
+    "content": "👋 Hey Ethan! Scribe here — I received your test message!\n\n✅ **Mission Control is working!**\n\nHere's what just happened:\n1. You sent a task in the dashboard\n2. I got notified instantly via Telegram\n3. I processed your request\n4. This response is now saved to GitHub\n\n**Click "Load All Responses" in the dashboard to see this message appear in your chat!**\n\nReady to do some real work? Just send me any copywriting task and I'll handle it 🚀",
+    "completedAt": 1771110900000
+  }
+}
