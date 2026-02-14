@@ -1,0 +1,12 @@
+{
+  "id": "scribe-1771068459465",
+  "agentId": "scribe",
+  "agentName": "Scribe",
+  "request": "Hello",
+  "status": "completed",
+  "timestamp": 1771068459465,
+  "response": {
+    "content": "👋 Hey there! Scribe here — ready to write some killer copy!\n\nWhat do you need? Facebook posts? Ad copy? Email sequences? Just say the word and I'll craft something compelling for your clients. 🚀",
+    "completedAt": 1771068500000
+  }
+}
