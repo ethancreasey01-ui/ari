@@ -206,62 +206,86 @@ function App() {
     }, 500);
   };
   
-  // Function to check for task responses
+  // Function to check for task responses - checks all tasks in GitHub
   const checkForResponses = async () => {
-    // Get all pending tasks from localStorage
-    const pendingTasks = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key?.startsWith('task-') && !key.includes('-completed')) {
-        const taskData = JSON.parse(localStorage.getItem(key) || '{}');
-        if (taskData.status === 'pending') {
-          pendingTasks.push(taskData);
-        }
-      }
-    }
+    console.log('Checking for responses...');
     
-    if (pendingTasks.length === 0) return;
+    // List of known task IDs to check (in production, this would be dynamic)
+    const taskIds = [
+      'scribe-1771068056331',
+      'scribe-1771068459465',
+      'scribe-1771066949874',
+      'scribe-1771110840000'
+    ];
     
-    for (const task of pendingTasks) {
+    for (const taskId of taskIds) {
       try {
-        const response = await fetch(`https://raw.githubusercontent.com/ethancreasey01-ui/ari/main/mission-control/tasks/${task.id}.json?t=${Date.now()}`);
+        console.log(`Checking task: ${taskId}`);
+        const response = await fetch(`https://raw.githubusercontent.com/ethancreasey01-ui/ari/main/mission-control/tasks/${taskId}.json?t=${Date.now()}`);
+        
         if (response.ok) {
           const taskData = await response.json();
+          console.log(`Found task data:`, taskData);
+          
           if (taskData.status === 'completed' && taskData.response) {
+            const agentId = taskData.agentId;
+            
             // Add response to chat
             const agentMessage = {
               role: 'agent',
               content: taskData.response.content,
               timestamp: taskData.response.completedAt || Date.now(),
-              taskId: task.id,
+              taskId: taskId,
               isComplete: true
             };
             
             setChatMessages(prev => {
-              const existing = prev[task.agentId]?.find(m => m.taskId === task.id && m.isComplete);
-              if (existing) return prev;
+              // Check if already added
+              const existing = prev[agentId]?.find(m => m.taskId === taskId && m.isComplete);
+              if (existing) {
+                console.log(`Task ${taskId} already in chat`);
+                return prev;
+              }
               
+              console.log(`Adding response for ${taskId} to ${agentId} chat`);
               return {
                 ...prev,
-                [task.agentId]: [...(prev[task.agentId] || []), agentMessage]
+                [agentId]: [...(prev[agentId] || []), agentMessage]
               };
             });
-            
-            // Update localStorage
-            localStorage.setItem(`task-${task.id}`, JSON.stringify({ ...task, status: 'completed' }));
-            localStorage.setItem(`task-${task.id}-completed`, JSON.stringify(taskData));
-            
-            // Remove from active tasks
-            setActiveTasks(prev => {
-              const newTasks = { ...prev };
-              delete newTasks[task.agentId];
-              return newTasks;
-            });
           }
+        } else {
+          console.log(`Task ${taskId} not found on GitHub`);
         }
       } catch (error) {
-        console.log(`Task ${task.id} not ready yet`);
+        console.error(`Error checking task ${taskId}:`, error);
       }
+    }
+  };
+  
+  // Function to directly load a specific task response
+  const loadTaskResponse = async (taskId, agentId) => {
+    try {
+      const response = await fetch(`https://raw.githubusercontent.com/ethancreasey01-ui/ari/main/mission-control/tasks/${taskId}.json?t=${Date.now()}`);
+      if (response.ok) {
+        const taskData = await response.json();
+        if (taskData.response) {
+          const agentMessage = {
+            role: 'agent',
+            content: taskData.response.content,
+            timestamp: Date.now(),
+            taskId: taskId,
+            isComplete: true
+          };
+          
+          setChatMessages(prev => ({
+            ...prev,
+            [agentId]: [...(prev[agentId] || []), agentMessage]
+          }));
+        }
+      }
+    } catch (error) {
+      console.error('Error loading task:', error);
     }
   };
 
@@ -385,6 +409,16 @@ function App() {
             >
               6 Agents Online
             </span>
+            {activeTab === 'agents' && (
+              <button
+                onClick={checkForResponses}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium"
+                style={{ background: colors.primary }}
+              >
+                <Clock className="w-3 h-3" />
+                Load All Responses
+              </button>
+            )}
           </div>
           
           <div className="flex items-center gap-4">

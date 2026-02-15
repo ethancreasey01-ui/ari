@@ -13,13 +13,9 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+  // NOTE: In production, use environment variables. Hardcoded for demo.
+  const BOT_TOKEN = '8442491003:AAGNte7AnL9DY4t3UmLNz1nZOIsruccEPXI';
   const CHAT_ID = '7548763122'; // Ethan's Telegram ID
-
-  if (!BOT_TOKEN) {
-    console.error('TELEGRAM_BOT_TOKEN not set');
-    return res.status(500).json({ error: 'Bot token not configured' });
-  }
 
   // Format the message
   const message = `📋 NEW MISSION CONTROL TASK
