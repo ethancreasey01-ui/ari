@@ -405,6 +405,159 @@
             opacity: 0.9;
         }
 
+        /* Extension Banner */
+        .extension-banner {
+            background: linear-gradient(135deg, #34c759 0%, #30d158 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .extension-banner-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .extension-icon {
+            font-size: 40px;
+        }
+
+        .extension-text {
+            flex: 1;
+        }
+
+        .extension-text strong {
+            font-size: 18px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .extension-text p {
+            margin: 0;
+            opacity: 0.95;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlide 0.3s ease;
+        }
+
+        @keyframes modalSlide {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid #f5f5f7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #86868b;
+            padding: 0;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: #f5f5f7;
+            color: #1d1d1f;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .install-steps {
+            padding-left: 25px;
+            margin: 0 0 20px 0;
+        }
+
+        .install-steps li {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .install-steps code {
+            background: #f5f5f7;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        .install-note {
+            background: #f0f9ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .modal-footer {
+            padding: 20px 25px;
+            border-top: 1px solid #f5f5f7;
+            display: flex;
+            justify-content: flex-end;
+        }
+
         /* Brand Settings */
         .brand-settings {
             background: white;
@@ -525,6 +678,14 @@
             background: #008c00;
         }
 
+        .copy-btn.facebook {
+            background: #1877f2;
+        }
+
+        .copy-btn.facebook:hover {
+            background: #166fe5;
+        }
+
         .copied {
             background: #34c759 !important;
         }
@@ -552,6 +713,45 @@
 </head>
 <body>
     <div class="container">
+        <!-- Extension Promo Banner -->
+        <div class="extension-banner" id="extensionBanner">
+            <div class="extension-banner-content">
+                <div class="extension-icon">🧩</div>
+                <div class="extension-text">
+                    <strong>Get the SocialSpark Browser Extension</strong>
+                    <p>One-click posting to Facebook & Groups. No more copy/paste!</p>
+                </div>
+                <button class="btn btn-primary" onclick="showInstallInstructions()">Install Extension</button>
+                <button class="btn btn-secondary" onclick="dismissBanner()" style="margin-left: 10px;">✕</button>
+            </div>
+        </div>
+
+        <!-- Install Instructions Modal -->
+        <div class="modal" id="installModal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>🧩 Install SocialSpark Extension</h3>
+                    <button class="modal-close" onclick="closeModal()">✕</button>
+                </div>
+                <div class="modal-body">
+                    <ol class="install-steps">
+                        <li><strong>Download</strong> the extension files from the link below</li>
+                        <li>Open Chrome and go to <code>chrome://extensions/</code></li>
+                        <li>Turn on <strong>"Developer mode"</strong> (toggle top right)</li>
+                        <li>Click <strong>"Load unpacked"</strong></li>
+                        <li>Select the <strong>socialspark-extension</strong> folder</li>
+                        <li>Done! The extension icon will appear in your toolbar</li>
+                    </ol>
+                    <div class="install-note">
+                        <strong>💡 Pro tip:</strong> Click the puzzle piece icon in Chrome toolbar, find "SocialSpark", and click the pin to keep it visible.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeModal()">Got it!</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Demo Banner -->
         <div class="demo-banner">
             <h2>🚀 SocialSpark AI - Demo</h2>
@@ -591,6 +791,7 @@
                     <input type="text" class="setting-input" id="businessName" placeholder="Your Business Name" value="Demo Business">
                     <label class="setting-label" style="margin-top: 10px;">Industry</label>
                     <select class="setting-input" id="industrySelect" onchange="changeIndustry(this.value)">
+                        <option value="tradies">🔧 Tradies (Plumber/Electrician/Builder)</option>
                         <option value="b2b">B2B Services</option>
                         <option value="ecommerce">E-commerce</option>
                         <option value="coaching">Coaching</option>
@@ -645,7 +846,8 @@
                 </div>
                 
                 <div class="industry-selector">
-                    <button class="industry-btn active" onclick="selectIndustry(this, 'b2b')">B2B Services</button>
+                    <button class="industry-btn active" onclick="selectIndustry(this, 'tradies')">🔧 Tradies</button>
+                    <button class="industry-btn" onclick="selectIndustry(this, 'b2b')">B2B Services</button>
                     <button class="industry-btn" onclick="selectIndustry(this, 'ecommerce')">E-commerce</button>
                     <button class="industry-btn" onclick="selectIndustry(this, 'coaching')">Coaching</button>
                     <button class="industry-btn" onclick="selectIndustry(this, 'realestate')">Real Estate</button>
@@ -1030,6 +1232,175 @@ Who exactly do you help?`,
                     time: 'Best time: Thursday 1pm'
                 }
             ],
+            tradies: [
+                {
+                    platform: 'facebook',
+                    type: 'Emergency Service',
+                    content: `🚨 EMERGENCY PLUMBING/ELECTRICAL/BUILDING SERVICES 🚨
+
+Burst pipe at 2am? Power out on Sunday? Storm damage?
+
+We're here 24/7 for emergencies in [Your Area].
+
+✅ Same-day service
+✅ Licensed & insured
+✅ Upfront pricing
+✅ No call-out fee
+
+📞 Call now: [YOUR NUMBER]
+📍 [Your Area] & surrounding suburbs
+
+Don't wait - call the experts!`,
+                    time: 'Best time: Anytime (emergency posts work 24/7)'
+                },
+                {
+                    platform: 'facebook',
+                    type: 'Free Quote Offer',
+                    content: `🔧 FREE QUOTES - NO OBLIGATION 🔧
+
+Need work done but not sure of the cost?
+
+We provide:
+✅ FREE on-site quotes
+✅ Upfront pricing (no surprises)
+✅ Honest advice
+✅ Quality guaranteed work
+
+Whether it's a small repair or major renovation, we'll give you a fair price.
+
+📞 Call [YOUR NUMBER] to book your free quote
+📍 Servicing [Your Area] & surrounds
+
+Limited spots available this week!`,
+                    time: 'Best time: Tuesday or Thursday 10am'
+                },
+                {
+                    platform: 'facebook',
+                    type: 'Before & After',
+                    content: `TRANSFORMATION TUESDAY! 🔨
+
+Before: [Describe problem - leaking pipes, faulty wiring, outdated bathroom]
+
+After: ✅ Fixed professionally ✅ Built to last ✅ Customer thrilled
+
+"[Customer name] was amazing! Fixed the problem quickly and left everything clean. Highly recommend!" - Happy Customer
+
+📞 Ready for your transformation?
+Call [YOUR NUMBER] for a free quote
+
+#transformation #beforeandafter #qualitywork`,
+                    time: 'Best time: Tuesday 9am'
+                },
+                {
+                    platform: 'facebook',
+                    type: 'Local Focus',
+                    content: `🏠 PROUDLY SERVING [YOUR AREA] FOR [X] YEARS 🏠
+
+We're not just another trades business - we're your local [plumbers/electricians/builders].
+
+We live here. We work here. We care about our community.
+
+When you call us, you get:
+✅ A local expert who knows the area
+✅ Fast response times
+✅ Fair, honest pricing
+✅ Quality work that lasts
+
+📞 [YOUR NUMBER]
+📍 [Your Area] & surrounding suburbs
+
+Supporting local businesses means supporting our community! 💪`,
+                    time: 'Best time: Wednesday 6pm'
+                },
+                {
+                    platform: 'facebook',
+                    type: 'Seasonal Tip',
+                    content: `💡 SEASONAL TIP FOR HOMEOWNERS 💡
+
+[Seasonal advice - e.g., winter plumbing tips, summer electrical safety, storm preparation]
+
+❌ DON'T: Wait until it's an emergency
+✅ DO: Get it checked now and save $$$
+
+Preventative maintenance today = No emergency call-out tomorrow.
+
+Not sure if your [pipes/wiring/roof] is ready for [season]?
+
+📞 Call [YOUR NUMBER] for a quick inspection
+📍 [Your Area]
+
+Stay safe and save money! 👍`,
+                    time: 'Best time: Sunday 4pm'
+                },
+                {
+                    platform: 'facebook',
+                    type: 'Trust Builder',
+                    content: `✅ WHY CHOOSE US? ✅
+
+🎖️ [X]+ years experience
+🎖️ Fully licensed & insured
+🎖️ [Number] 5-star reviews
+🎖️ Upfront pricing - no hidden costs
+🎖️ Clean, respectful service
+🎖️ Workmanship guarantee
+🎖️ Emergency services available
+
+We treat your home like it's our own.
+
+📞 Call [YOUR NUMBER] today
+📍 [Your Area] & surrounds
+
+Quality you can trust. Service you can count on.`,
+                    time: 'Best time: Thursday 11am'
+                },
+                {
+                    platform: 'facebook',
+                    type: 'Limited Time Offer',
+                    content: `⚡ THIS WEEK ONLY ⚡
+
+Book any [plumbing/electrical/building] job this week and get:
+
+🎁 10% OFF labour costs
+🎁 FREE safety inspection
+🎁 Priority scheduling
+
+Hurry! Offer ends Sunday.
+
+📞 Call [YOUR NUMBER] now to book
+📍 [Your Area]
+
+*Conditions apply. Mention this post when booking.*`,
+                    time: 'Best time: Monday 8am'
+                },
+                {
+                    platform: 'facebook',
+                    type: 'FAQ/Educational',
+                    content: `❓ CUSTOMER QUESTION ❓
+
+"How do I know if I need a [plumber/electrician/builder] or if I can DIY?"
+
+Great question! Here's the rule:
+
+If it involves:
+❌ Gas lines
+❌ Electrical wiring
+❌ Structural work
+❌ Water mains
+
+👉 CALL A PROFESSIONAL
+
+It's not worth the risk to your safety or your home.
+
+Small jobs like changing a tap washer? Maybe DIY.
+Everything else? Call the experts.
+
+📞 [YOUR NUMBER]
+📍 [Your Area]
+
+We're here to help, not judge! 👍`,
+                    time: 'Best time: Saturday 10am'
+                }
+            ],
             realestate: [
                 {
                     platform: 'instagram',
@@ -1080,7 +1451,7 @@ Results, not promises. 🏆
             ]
         };
 
-        let currentIndustry = 'b2b';
+        let currentIndustry = 'tradies';
 
         function selectIndustry(btn, industry) {
             document.querySelectorAll('.industry-btn').forEach(b => b.classList.remove('active'));
@@ -1114,12 +1485,15 @@ Results, not promises. 🏆
                             </div>
                             <div class="post-content">${post.content.replace(/\n/g, '<br>')}</div>
                             <div class="post-actions">
-                                <button class="post-btn">✏️ Edit</button>
+                                <button class="post-btn" onclick="editPost(this)">✏️ Edit</button>
                                 <button class="copy-btn" onclick="copyToClipboard('${post.content.replace(/'/g, "\\'")}', this)">
-                                    📋 Copy for Facebook
+                                    📋 Copy
                                 </button>
-                                <button class="copy-btn groups" onclick="copyToClipboard('${post.content.replace(/'/g, "\\'")}', this)">
-                                    👥 Copy for Groups
+                                <button class="copy-btn facebook" onclick="postToFacebookWithCheck('${post.content.replace(/'/g, "\\'")}', 'feed', this)">
+                                    📘 Post to Facebook
+                                </button>
+                                <button class="copy-btn groups" onclick="postToFacebookWithCheck('${post.content.replace(/'/g, "\\'")}', 'groups', this)">
+                                    👥 Post to Groups
                                 </button>
                             </div>
                         </div>
@@ -1132,6 +1506,9 @@ Results, not promises. 🏆
 
         // Generate initial content
         generateContent();
+
+        // Check for extension and update UI
+        checkExtensionStatus();
 
         // Handle logo upload
         function handleLogoUpload(event) {
@@ -1182,6 +1559,192 @@ Results, not promises. 🏆
         function changeIndustry(industry) {
             generateContent();
             showToast(`Switched to ${industry} content`);
+        }
+
+        // Show install instructions modal
+        function showInstallInstructions() {
+            document.getElementById('installModal').style.display = 'flex';
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('installModal').style.display = 'none';
+        }
+
+        // Dismiss banner
+        function dismissBanner() {
+            const banner = document.getElementById('extensionBanner');
+            banner.style.animation = 'slideUp 0.3s ease';
+            setTimeout(() => {
+                banner.style.display = 'none';
+            }, 300);
+        }
+
+        // Add slideUp animation
+        const bannerStyle = document.createElement('style');
+        bannerStyle.textContent = `
+            @keyframes slideUp {
+                from { transform: translateY(0); opacity: 1; }
+                to { transform: translateY(-20px); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(bannerStyle);
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function(e) {
+            const modal = document.getElementById('installModal');
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Check if extension is installed
+        function checkExtensionStatus() {
+            // Try to communicate with extension
+            if (typeof chrome !== 'undefined' && chrome.runtime) {
+                chrome.runtime.sendMessage('socialspark-extension-id', { action: 'ping' }, (response) => {
+                    if (chrome.runtime.lastError) {
+                        // Extension not installed or can't communicate
+                        console.log('Extension not detected');
+                        updatePostButtonsForNoExtension();
+                    } else if (response && response.success) {
+                        console.log('Extension detected:', response.version);
+                        updatePostButtonsForExtension();
+                    }
+                });
+            } else {
+                console.log('Chrome API not available');
+                updatePostButtonsForNoExtension();
+            }
+        }
+
+        // Update buttons when extension is available
+        function updatePostButtonsForExtension() {
+            // This will be called to enhance buttons with extension functionality
+            console.log('Extension ready - enhanced posting available');
+        }
+
+        // Update buttons when extension is NOT available
+        function updatePostButtonsForNoExtension() {
+            console.log('Extension not available - manual copy mode');
+        }
+
+        // Post to Facebook using extension
+        async function postToFacebook(content, target = 'feed') {
+            try {
+                // Check if extension is available
+                if (typeof chrome !== 'undefined' && chrome.runtime) {
+                    const response = await chrome.runtime.sendMessage({
+                        action: 'postToFacebook',
+                        content: content,
+                        target: target
+                    });
+                    
+                    if (response && response.success) {
+                        showToast('✓ Facebook opened! Click "Post" to publish.');
+                        return true;
+                    } else {
+                        throw new Error(response?.error || 'Failed to post');
+                    }
+                } else {
+                    throw new Error('Extension not available');
+                }
+            } catch (error) {
+                console.error('Post to Facebook error:', error);
+                showToast('✗ Could not connect to extension. Please install it first.');
+                return false;
+            }
+        }
+
+        // Post to Facebook with extension check
+        async function postToFacebookWithCheck(content, target, button) {
+            // Show loading state
+            const originalText = button.innerHTML;
+            button.innerHTML = '⏳ Opening Facebook...';
+            button.disabled = true;
+            
+            try {
+                // Try to use extension
+                if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
+                    const response = await new Promise((resolve, reject) => {
+                        chrome.runtime.sendMessage({
+                            action: 'postToFacebook',
+                            content: content,
+                            target: target
+                        }, (response) => {
+                            if (chrome.runtime.lastError) {
+                                reject(new Error(chrome.runtime.lastError.message));
+                            } else {
+                                resolve(response);
+                            }
+                        });
+                    });
+                    
+                    if (response && response.success) {
+                        button.innerHTML = '✅ Facebook Opened!';
+                        button.classList.add('copied');
+                        showToast('✓ Facebook opened! Click "Post" to publish.');
+                        setTimeout(() => {
+                            button.innerHTML = originalText;
+                            button.classList.remove('copied');
+                            button.disabled = false;
+                        }, 3000);
+                        return;
+                    }
+                }
+                
+                // Extension not available, fall back to copy
+                throw new Error('Extension not available');
+                
+            } catch (error) {
+                console.log('Extension not available, falling back to copy:', error);
+                
+                // Fall back to clipboard copy
+                navigator.clipboard.writeText(content).then(() => {
+                    button.innerHTML = '✅ Copied!';
+                    button.classList.add('copied');
+                    showToast('Content copied! Extension not installed. Please install the SocialSpark extension for one-click posting.');
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.classList.remove('copied');
+                        button.disabled = false;
+                    }, 3000);
+                }).catch(() => {
+                    button.innerHTML = '❌ Failed';
+                    showToast('Failed to copy. Please try again.');
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.disabled = false;
+                    }, 2000);
+                });
+            }
+        }
+
+        // Edit post function
+        function editPost(button) {
+            const postCard = button.closest('.post-card');
+            const contentDiv = postCard.querySelector('.post-content');
+            const currentContent = contentDiv.innerText;
+            
+            // Create editable textarea
+            const textarea = document.createElement('textarea');
+            textarea.className = 'post-edit-textarea';
+            textarea.value = currentContent;
+            textarea.style.cssText = 'width: 100%; min-height: 150px; padding: 12px; border: 2px solid #667eea; border-radius: 8px; font-family: inherit; font-size: 15px; line-height: 1.6; resize: vertical;';
+            
+            // Replace content with textarea
+            contentDiv.innerHTML = '';
+            contentDiv.appendChild(textarea);
+            textarea.focus();
+            
+            // Change button to "Save"
+            button.innerHTML = '💾 Save';
+            button.onclick = function() {
+                contentDiv.innerHTML = textarea.value.replace(/\n/g, '<br>');
+                button.innerHTML = '✏️ Edit';
+                button.onclick = function() { editPost(button); };
+                showToast('Post updated!');
+            };
         }
 
         // Show toast notification
